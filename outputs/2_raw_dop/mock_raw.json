@@ -1,0 +1,27 @@
+{
+  "cameraHeight": 1.6,
+  "layoutHeight": 3.2,
+  "cameraCeilingHeight": 1.6,
+  "layoutObj2ds": {
+    "num": 0,
+    "obj2ds": []
+  },
+  "layoutPoints": {
+    "num": 4,
+    "points": [
+      { "xyz": [-2.0, 1.6, -2.0], "id": 0 },
+      { "xyz": [2.0, 1.6, -2.0], "id": 1 },
+      { "xyz": [2.0, 1.6, 2.0], "id": 2 },
+      { "xyz": [-2.0, 1.6, 2.0], "id": 3 }
+    ]
+  },
+  "layoutWalls": {
+    "num": 4,
+    "walls": [
+      { "normal": [0, 0, 1], "planeEquation": [0, 0, 1, 2], "pointsIdx": [0, 1] },
+      { "normal": [-1, 0, 0], "planeEquation": [-1, 0, 0, 2], "pointsIdx": [1, 2] },
+      { "normal": [0, 0, -1], "planeEquation": [0, 0, -1, 2], "pointsIdx": [2, 3] },
+      { "normal": [1, 0, 0], "planeEquation": [1, 0, 0, 2], "pointsIdx": [3, 0] }
+    ]
+  }
+}
