@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 try:
-    from .dula.layout import fit_layout
+    from .layout import fit_layout
 except ImportError:  # Allows direct CLI execution: python postprocessing/...
-    from Computer_Graphics.Project.src.postprocessing.dula.layout import fit_layout
+    from Computer_Graphics.Project.src.layout import fit_layout
 
 
 def boundary_to_floor_xz(
