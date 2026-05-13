@@ -2,4 +2,9 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+env/
 checkpoints/
+.pip_cache/
+.tmp/
+outputs/
+static/
