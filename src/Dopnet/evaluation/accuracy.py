@@ -130,12 +130,12 @@ def calc_pe(dt, gt):
         dt_floor_boundary = uv2pixel(dt_floor_boundary, w, h)
         dt_ceil_boundary = uv2pixel(dt_ceil_boundary, w, h)
 
-        gt_surface = np.zeros((h, w), dtype=np.int32)
+        gt_surface = np.zeros((h, w), dtype=int32)
         gt_surface[gt_ceil_boundary[..., 1], np.arange(w)] = 1
         gt_surface[gt_floor_boundary[..., 1], np.arange(w)] = 1
         gt_surface = np.cumsum(gt_surface, axis=0)
 
-        dt_surface = np.zeros((h, w), dtype=np.int32)
+        dt_surface = np.zeros((h, w), dtype=int32)
         dt_surface[dt_ceil_boundary[..., 1], np.arange(w)] = 1
         dt_surface[dt_floor_boundary[..., 1], np.arange(w)] = 1
         dt_surface = np.cumsum(dt_surface, axis=0)

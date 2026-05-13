@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Convert raw panorama boundary JSON to post-processed layout3d outputs."""
 
 from __future__ import annotations
@@ -10,11 +9,12 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-try:
-    from .layout import fit_layout
-except ImportError:  # Allows direct CLI execution: python postprocessing/...
-    from Computer_Graphics.Project.src.layout import fit_layout
+# try:
+#     from .layout import fit_layout
+# except ImportError:  # Allows direct CLI execution: python postprocessing/...
+#     from Computer_Graphics.Project.src.layout import fit_layout
 
+from layout import fit_layout
 
 def boundary_to_floor_xz(
     floor_boundary: list[float] | np.ndarray,

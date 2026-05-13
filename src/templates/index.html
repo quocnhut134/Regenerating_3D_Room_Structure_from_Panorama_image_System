@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Room Layout Reconstruction</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; 
+            display: flex; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #222; 
+            color: #eee; 
+        }
+        #sidebar { 
+            width: 320px; 
+            height: 100%;
+            background-color: #333; 
+            padding: 20px; 
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5); 
+            z-index: 10; 
+            display: flex; 
+            flex-direction: column;
+            box-sizing: border-box; 
+        }
+        #sidebar h2 { 
+            margin-top: 0; 
+            font-size: 1.2rem; 
+            color: #fff; 
+            border-bottom: 1px solid #555; 
+            padding-bottom: 10px; 
+        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #bbb; }
+        select, input[type="file"] { width: 100%; padding: 8px; background-color: #444; border: 1px solid #555; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; margin-top: 10px; }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #555; cursor: not-allowed; }
+        #status-box { margin-top: 20px; padding: 15px; background-color: #2a2a2a; border-radius: 4px; font-size: 0.85rem; border-left: 3px solid #007bff; display: none; }
+        .loader { border: 3px solid #444; border-top: 3px solid #007bff; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #viewer-container { 
+            flex-grow: 1; 
+            height: 100%; 
+            position: relative; 
+            background-color: #1e1e1e; 
+        }
+        #watermark { position: absolute; bottom: 20px; right: 20px; color: rgba(255,255,255,0.2); font-size: 1.5rem; font-weight: bold; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h2>Settings</h2>
+        <form id="upload-form">
+            <div class="form-group">
+                <label>Choose model</label>
+                <select id="model_choice" name="model_choice">
+                    <option value="LGT-Net">LGT-Net</option>
+                    <option value="DOPNet">DOPNet</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Upload Panorama Image</label>
+                <input type="file" id="panorama_image" name="panorama_image" accept="image/png, image/jpeg" required>
+            </div>
+            <button type="submit" id="btn-submit">START 3D RECONSTRUCTION</button>
+        </form>
+
+        <div id="status-box">
+            <div id="loading-spinner" class="loader"></div>
+            <span id="status-text">Processing data...</span>
+        </div>
+    </div>
+
+    <div id="viewer-container">
+        <div id="watermark">CS105.Q21 - 3D Room Reconstruction</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/MTLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+
+    <script>
+        const container = document.getElementById('viewer-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x1e1e1e); 
+
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(0, 5, 10); 
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); 
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; 
+        controls.dampingFactor = 0.05;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        let currentModel = null;
+        function loadModelToViewer(objUrl, mtlUrl) {
+            if (currentModel) scene.remove(currentModel);
+            const mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load(mtlUrl, function (materials) {
+                materials.preload();
+                const objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load(objUrl, function (object) {
+                    currentModel = object;
+                    scene.add(object);
+                    
+                    const box = new THREE.Box3().setFromObject(object);
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+                    
+                    object.position.x += (object.position.x - center.x);
+                    object.position.y += (object.position.y - center.y);
+                    object.position.z += (object.position.z - center.z);
+                    
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const fov = camera.fov * (Math.PI / 180);
+                    let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+                    camera.position.set(0, maxDim, cameraZ * 1.5);
+                    controls.target.set(0, 0, 0);
+                    controls.update();
+
+                }, undefined, function (error) {
+                    console.error("OBJ Error:", error);
+                    alert("Failed to load model. Please try again.");
+                });
+            });
+        }
+
+        const form = document.getElementById('upload-form');
+        const btnSubmit = document.getElementById('btn-submit');
+        const statusBox = document.getElementById('status-box');
+        const statusText = document.getElementById('status-text');
+        const spinner = document.getElementById('loading-spinner');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            btnSubmit.disabled = true;
+            statusBox.style.display = 'block';
+            spinner.style.display = 'inline-block';
+            statusText.innerText = 'System is running AI. Please wait...';
+            statusBox.style.borderLeftColor = '#007bff';
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/process', { method: 'POST', body: formData });
+                const data = await response.json();
+
+                if (data.success) {
+                    statusText.innerText = 'Success! Loading model...';
+                    spinner.style.display = 'none';
+                    statusBox.style.borderLeftColor = '#28a745'; 
+                    loadModelToViewer(data.obj_url, data.mtl_url);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                statusText.innerText = 'ERROR: ' + error.message;
+                spinner.style.display = 'none';
+                statusBox.style.borderLeftColor = '#dc3545'; 
+            } finally {
+                btnSubmit.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

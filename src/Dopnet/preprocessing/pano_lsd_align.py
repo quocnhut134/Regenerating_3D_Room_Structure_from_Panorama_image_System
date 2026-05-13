@@ -790,9 +790,9 @@ def paintParameterLine(parameterLine, width, height):
         xyz = uv2xyzN(np.hstack([u, v]), lines[i, 3])
         uv = xyz2uvN(xyz, 1)
         m = np.minimum(np.floor((uv[:,0] + np.pi) / (2 * np.pi) * width) + 1,
-            width).astype(np.int32)
+            width).astype(int32)
         n = np.minimum(np.floor(((np.pi / 2) - uv[:, 1]) / np.pi * height) + 1,
-            height).astype(np.int32)
+            height).astype(int32)
         panoEdgeC[n-1, m-1] = i
 
     return panoEdgeC

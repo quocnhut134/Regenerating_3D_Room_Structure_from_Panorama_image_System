@@ -38,7 +38,7 @@ def export_full_room(json_path, img_path, output_dir):
         v = 0.5 + np.arcsin(y / d) / np.pi
         return u, v
 
-    def build_surface_grid(p_tl, p_tr, p_br, p_bl, grid_res=50):
+    def build_surface_grid(p_tl, p_tr, p_br, p_bl, grid_res=50, invert_faces=False):
         start_idx = len(vertices) + 1
         for j in range(grid_res + 1):
             v_f = j / grid_res
@@ -63,14 +63,19 @@ def export_full_room(json_path, img_path, output_dir):
                 v3 = v2 + (grid_res + 1)
                 v4 = v1 + (grid_res + 1)
                 
-                faces_interior.append((v1, v2, v3, v4))
-                faces_exterior.append((v1, v4, v3, v2))
+                if invert_faces:
+                    faces_interior.append((v1, v4, v3, v2))
+                    faces_exterior.append((v1, v2, v3, v4))
+                else:
+                    faces_interior.append((v1, v2, v3, v4))
+                    faces_exterior.append((v1, v4, v3, v2))
 
     for i in range(n):
         c1, c2 = corners[i], corners[(i+1)%n]
         build_surface_grid(
             np.array([c1['x'], y_ceil, c1['z']]), np.array([c2['x'], y_ceil, c2['z']]),
-            np.array([c2['x'], y_floor, c2['z']]), np.array([c1['x'], y_floor, c1['z']])
+            np.array([c2['x'], y_floor, c2['z']]), np.array([c1['x'], y_floor, c1['z']]),
+            invert_faces=True 
         )
 
     center = np.mean([[c['x'], c['z']] for c in corners], axis=0)
@@ -115,4 +120,11 @@ def export_full_room(json_path, img_path, output_dir):
             f.write(f"f {face[0]+num_v} {face[1]+num_v} {face[2]+num_v} {face[3]+num_v}\n")
 
 if __name__ == '__main__':
-    export_full_room("./outputs/3_layouts/AFimg0001_layout3d.json", "./outputs/3_layouts/AFimg0001.png", "./outputs/4_renders/AFimg0001_room")
+    import sys
+    if len(sys.argv) == 4:
+        layout_json = sys.argv[1]
+        pano_img = sys.argv[2]
+        output_folder = sys.argv[3]
+        export_full_room(layout_json, pano_img, output_folder)
+    else:
+        print("Error from command line arguments.")
