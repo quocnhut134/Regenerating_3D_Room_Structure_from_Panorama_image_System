@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, url_for
 import os
 from werkzeug.utils import secure_filename
 from pipeline import run_3d_reconstruction_pipeline
+from PIL import Image
 
 app = Flask(__name__)
 
@@ -29,6 +30,14 @@ def process_image():
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
+        
+        try:
+            with Image.open(filepath) as img:
+                img = img.convert('RGB')
+                img = img.resize((1024, 512), Image.Resampling.LANCZOS)
+                img.save(filepath, format='JPEG', quality=95)
+        except Exception as e:
+            print(e)
         
         try:
             result_dir_relative = run_3d_reconstruction_pipeline(filepath, model_type=model_choice)
