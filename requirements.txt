@@ -1,0 +1,11 @@
+flask
+werkzeug
+opencv-python-headless
+matplotlib
+numpy==1.26.4
+scipy
+einops
+shapely
+yacs
+tqdm
+pylsd-nova
