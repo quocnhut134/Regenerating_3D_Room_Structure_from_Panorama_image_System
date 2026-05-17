@@ -7,4 +7,5 @@ checkpoints/
 .pip_cache/
 .tmp/
 outputs/
-static/
+results/
+uploads/
