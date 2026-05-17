@@ -50,6 +50,15 @@
             background-color: #1e1e1e; 
         }
         #watermark { position: absolute; bottom: 20px; right: 20px; color: rgba(255,255,255,0.2); font-size: 1.5rem; font-weight: bold; pointer-events: none; }
+
+        .sample-gallery { display: flex; gap: 10px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .sample-img { 
+            width: 80px; height: 40px; object-fit: cover; 
+            cursor: pointer; border: 2px solid transparent; 
+            border-radius: 4px; transition: 0.2s; opacity: 0.7;
+        }
+        .sample-img:hover { opacity: 1; border-color: #555; }
+        .sample-img.selected { opacity: 1; border-color: #007bff; box-shadow: 0 0 8px rgba(0,123,255,0.5); }
     </style>
 </head>
 <body>
@@ -68,6 +77,15 @@
                 <input type="file" id="panorama_image" name="panorama_image" accept="image/png, image/jpeg" required>
             </div>
             <button type="submit" id="btn-submit">START 3D RECONSTRUCTION</button>
+
+            <div class="form-group">
+                <label>Or choose a sample room:</label>
+                <div class="sample-gallery">
+                    <img src="/static/samples/AFimg0002.png" class="sample-img" data-filename="AFimg0002.png" title="Room 1">
+                    <img src="/static/samples/AFimg0018.png" class="sample-img" data-filename="AFimg0018.png" title="Room 2">
+                </div>
+                <input type="hidden" id="selected_sample" name="selected_sample" value="">
+            </div>
         </form>
 
         <div id="status-box">
@@ -160,6 +178,28 @@
         const statusBox = document.getElementById('status-box');
         const statusText = document.getElementById('status-text');
         const spinner = document.getElementById('loading-spinner');
+
+        const sampleImgs = document.querySelectorAll('.sample-img');
+        const hiddenSampleInput = document.getElementById('selected_sample');
+        const fileInput = document.getElementById('panorama_image');
+
+        sampleImgs.forEach(img => {
+            img.addEventListener('click', () => {
+                sampleImgs.forEach(i => i.classList.remove('selected'));
+                img.classList.add('selected');
+                hiddenSampleInput.value = img.dataset.filename;
+                fileInput.value = "";
+                fileInput.removeAttribute('required');
+            });
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.value) {
+                sampleImgs.forEach(i => i.classList.remove('selected'));
+                hiddenSampleInput.value = "";
+                fileInput.setAttribute('required', 'required');
+            }
+        });
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault(); 
