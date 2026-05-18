@@ -14,6 +14,12 @@ This project was managed and developed by:
 -   **Tran Bao Tran - 23521623**
 -   **Nguyen Hoang Kha - 23520667**
 
+## Deployment
+
+You can find and enjoy our deployed system at: [SaitoHoujou/3d-room-reconstruction-from-panorama-image](https://huggingface.co/spaces/SaitoHoujou/3d-room-reconstruction-from-panorama-image)
+
+Or, you can watch the demo video at:
+
 ## System Architecture
 
 1. **Frontend:** HTML5, CSS3, JavaScript (Three.js). Handles user input, displays the 3D scene, and manages API requests.
