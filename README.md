@@ -20,6 +20,8 @@ You can find and enjoy our deployed system at: [SaitoHoujou/3d-room-reconstructi
 
 Or, you can watch the demo video at:
 
+<img width="1919" height="868" alt="Image" src="https://github.com/user-attachments/assets/8d843324-a6ce-457c-9c94-f8ff958e3e3e" />
+
 ## System Architecture
 
 1. **Frontend:** HTML5, CSS3, JavaScript (Three.js). Handles user input, displays the 3D scene, and manages API requests.
