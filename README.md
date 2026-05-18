@@ -9,10 +9,10 @@ The project features a Flask-based backend and a custom Three.js frontend, offer
 ## Authors
 
 This project was managed and developed by:
--   **Duong Quoc Nhut**
--   **Dang Hoai Nam**
--   **Tran Bao Tran**
--   **Nguyen Hoang Kha**
+-   **Duong Quoc Nhut - 23521132**
+-   **Dang Hoai Nam - 23520967**
+-   **Tran Bao Tran - 23521623**
+-   **Nguyen Hoang Kha - 23520667**
 
 ## System Architecture
 
