@@ -18,7 +18,7 @@ This project was managed and developed by:
 
 You can find and enjoy our deployed web system at [3D Room Reconstruction from Panorama Image](https://huggingface.co/spaces/SaitoHoujou/3d-room-reconstruction-from-panorama-image)
 
-Or, you can watch our demo video on Youtube at [CS105.Q21 | Demo Web of 3D Reconstruction from Panorama Image System](https://www.youtube.com/watch?v=wkcJDULa31w)
+Or, you can watch our demo video on Youtube at [Demo Web of 3D Reconstruction from Panorama Image System](https://www.youtube.com/watch?v=wkcJDULa31w)
 
 ## System Architecture
 
