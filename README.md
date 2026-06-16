@@ -22,7 +22,7 @@ Or, you can watch our demo video on Youtube at [Demo Web of 3D Reconstruction fr
 
 | **3D Outside** | **3D Anatomy View** | **3D Inside** |
 | :---: | :---: | :---: |
-| <img width="839" height="550" alt="Image" src="https://github.com/user-attachments/assets/9eb95fda-dd5d-4c9d-b2f9-e221dfb90e97" width="60%"/> | <img width="704" height="502" alt="Image" src="https://github.com/user-attachments/assets/a5fa6074-43f0-463a-bc1d-8b08835e5f10" width="60%"/> | <img width="1335" height="797" alt="Image" src="https://github.com/user-attachments/assets/0f67c2d0-6c8c-430d-84ac-9b2cc10c3fbe" width="60%"/> |
+| <img width="839" height="550" alt="Image" src="https://github.com/user-attachments/assets/9eb95fda-dd5d-4c9d-b2f9-e221dfb90e97" width="80%"/> | <img width="704" height="502" alt="Image" src="https://github.com/user-attachments/assets/a5fa6074-43f0-463a-bc1d-8b08835e5f10" width="80%"/> | <img width="1335" height="797" alt="Image" src="https://github.com/user-attachments/assets/0f67c2d0-6c8c-430d-84ac-9b2cc10c3fbe" width="60%"/> |
 
 ## System Architecture
 
