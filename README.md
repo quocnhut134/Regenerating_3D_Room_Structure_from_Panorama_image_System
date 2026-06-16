@@ -9,10 +9,16 @@ The project features a Flask-based backend and a custom Three.js frontend, offer
 ## Authors
 
 This project was managed and developed by:
--   **Duong Quoc Nhut**
--   **Dang Hoai Nam**
--   **Tran Bao Tran**
--   **Nguyen Hoang Kha**
+-   **Duong Quoc Nhut - 23521132 - Leader**
+-   **Dang Hoai Nam - 23520967 - Member**
+-   **Tran Bao Tran - 23521623 - Member**
+-   **Nguyen Hoang Kha - 23520667 - Member**
+
+## Demo
+
+You can find and enjoy our deployed web system at [3D Room Reconstruction from Panorama Image](https://huggingface.co/spaces/SaitoHoujou/3d-room-reconstruction-from-panorama-image)
+
+Or, you can watch our demo video on Youtube at [CS105.Q21 | Demo Web of 3D Reconstruction from Panorama Image System](https://www.youtube.com/watch?v=wkcJDULa31w)
 
 ## System Architecture
 
